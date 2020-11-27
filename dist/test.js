@@ -11452,6 +11452,7 @@
         const docs = await getMongoUpdates(db, docName);
         const updates = getUpdates(docs);
         const ydoc = new Doc();
+        console.log(ydoc.toJSON());
         ydoc.transact(() => {
           for (let i = 0; i < updates.length; i++) {
             applyUpdate(ydoc, updates[i]);

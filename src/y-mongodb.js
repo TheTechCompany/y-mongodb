@@ -45,6 +45,7 @@ export class MongodbPersistence {
       const docs = await U.getMongoUpdates(db, docName)
       const updates = getUpdates(docs)
       const ydoc = new Y.Doc()
+      console.log(ydoc.toJSON())
       ydoc.transact(() => {
         for (let i = 0; i < updates.length; i++) {
           Y.applyUpdate(ydoc, updates[i])
