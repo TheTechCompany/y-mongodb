@@ -11301,8 +11301,8 @@
     const clock = await getCurrentUpdateClock(db, docName);
     if (clock === -1) {
       const ydoc = new Doc();
-      console.log(ydoc.toJSON());
       applyUpdate(ydoc, update);
+      console.log(ydoc.toJSON());
       const sv = encodeStateVector(ydoc);
       await writeStateVector$1(db, docName, sv, 0);
     }

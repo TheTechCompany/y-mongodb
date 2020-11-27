@@ -207,8 +207,8 @@ const storeUpdate = async (db, docName, update) => {
   const clock = await getCurrentUpdateClock(db, docName);
   if (clock === -1) {
     const ydoc = new Y.Doc();
-    console.log(ydoc.toJSON());
     Y.applyUpdate(ydoc, update);
+    console.log(ydoc.toJSON());
     const sv = Y.encodeStateVector(ydoc);
     await writeStateVector(db, docName, sv, 0);
   }
