@@ -11374,7 +11374,7 @@
           this.db = db;
           console.log("=> Connected to Y-MongoDB");
         }finally{
-          await mongojsDb.close();
+          //        await mongojsDb.close()
         }
       };
 
