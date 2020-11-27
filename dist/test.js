@@ -11366,7 +11366,7 @@
     open () {
       const mongojsDb = new MongoClient(this.location, {useUnifiedTopology: true});
 
-      async function connect(dbName){
+      const connect = async (dbName) => {
         try{
           await mongojsDb.connect();
 
@@ -11376,7 +11376,7 @@
         }finally{
           await mongojsDb.close();
         }
-      }
+      };
 
       connect(this.dbName);
     }
