@@ -33,7 +33,7 @@ export class MongoAdapter {
 
   async put (values) {
     if (!values.docName && !values.version && !values.value) { throw new Error('Document and version must be provided') }
-
+    console.log(values)
     return await this.db.collection(this.collection).save(values)
   }
 
@@ -44,7 +44,6 @@ export class MongoAdapter {
   }
 
   async readAsCursor (query, opts = {}) {
-    console.log("Read as cursor opts: ", opts)
     return await this.db.collection(this.collection).find(query).sort({clock: -1}).toArray()
   }
 
