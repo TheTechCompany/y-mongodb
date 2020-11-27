@@ -16,8 +16,8 @@ export class MongodbPersistence {
    * @param {string} location
    * @param {string} [collection]
    */
-  constructor (location, collection) {
-    const db = new MongoAdapter(location, collection)
+  constructor (location, db, collection) {
+    const db = new MongoAdapter(location, db, collection)
     this.tr = promise.resolve()
 
     this._transact = f => {
