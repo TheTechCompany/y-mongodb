@@ -41,9 +41,19 @@ class MongoAdapter {
     return await this.db.collection(this.collection).findOne(query)
   }
 
+  async putKey(collection, id, key, value){
+    let setter = {};
+    setter[key] = value;
+    return await this.db.collection(collection).updateOne({
+      _id: id
+    }, {
+      $set: setter
+    })
+  }
+
   async put (values) {
     if (!values.docName && !values.version && !values.value) { throw new Error('Document and version must be provided') }
-    console.log(values.value.toString());
+
     return await this.db.collection(this.collection).save(values)
   }
 
@@ -286,6 +296,10 @@ class MongodbPersistence {
       }
       return ydoc
     })
+  }
+
+  storeBlob(collection, id, obj, key){
+    return this._transact(db => db.putKey(collection, id, key, obj)) 
   }
 
   /**

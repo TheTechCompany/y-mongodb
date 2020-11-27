@@ -58,6 +58,10 @@ export class MongodbPersistence {
     })
   }
 
+  storeBlob(collection, id, obj, key){
+    return this._transact(db => db.putKey(collection, id, key, obj)) 
+  }
+
   /**
    * @param {string} docName
    * @param {Uint8Array} update
