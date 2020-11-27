@@ -294,6 +294,7 @@ class MongodbPersistence {
    * @return {Promise<number>} Returns the clock of the stored update
    */
   storeUpdate (docName, update) {
+    console.log("STORING", docName, update);
     return this._transact(db => storeUpdate(db, docName, update))
   }
 
