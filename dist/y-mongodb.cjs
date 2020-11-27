@@ -231,8 +231,8 @@ class MongodbPersistence {
    * @param {string} location
    * @param {string} [collection]
    */
-  constructor (location, collection) {
-    const db = new MongoAdapter(location, collection);
+  constructor (location, _db, collection) {
+    const db = new MongoAdapter(location, _db, collection);
     this.tr = promise.resolve();
 
     this._transact = f => {
