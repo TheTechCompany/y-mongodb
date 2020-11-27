@@ -21,6 +21,20 @@ class MongoAdapter {
 
   open () {
     const mongojsDb = new MongoClient(this.location);
+
+    async function connect(){
+      try{
+        await mongojsDb.connect();
+
+        const db = mongojsDb.db(this.dbName);
+        this.db = db;
+        console.log("=> Connected to Y-MongoDB");
+      }finally{
+        await mongojsDb.close();
+      }
+    }
+
+    connect();
   }
 
   async get (query) {
@@ -117,7 +131,7 @@ const createDocumentStateVectorKey = docName => {
  * @param {any} db
  * @param {Object} values
  */
-const mongoPut = async (db, values) => db.put(values);
+const mongoPut = async (db, values) => await db.put(values);
 
 /**
  * @param {any} db
@@ -125,7 +139,7 @@ const mongoPut = async (db, values) => db.put(values);
  * @param {object} opts
  * @return {Promise<Array<any>>}
  */
-const getMongoBulkData = (db, query, opts) => db.readAsCursor(query, opts);
+const getMongoBulkData = async (db, query, opts) => await db.readAsCursor(query, opts);
 
 /**
  * @param {any} db
@@ -141,7 +155,7 @@ const flushDB = db => db.flush();
  * @param {any} [opts]
  * @return {Promise<Array<Object>>}
  */
-const getMongoUpdates = async (db, docName, opts = {}) => getMongoBulkData(db, {
+const getMongoUpdates = async (db, docName, opts = {}) => await getMongoBulkData(db, {
   ...createDocumentUpdateKey(docName, 0),
   clock: {
     $gte: 0,
@@ -156,7 +170,7 @@ opts
  * @param {string} docName
  * @return {Promise<number>} Returns -1 if this document doesn't exist yet
  */
-const getCurrentUpdateClock = (db, docName) => getMongoUpdates(db, docName, {
+const getCurrentUpdateClock = async (db, docName) => await getMongoUpdates(db, docName, {
   reverse: true,
   limit: 1
 }).then(updates => {

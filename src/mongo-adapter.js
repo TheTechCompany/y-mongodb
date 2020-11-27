@@ -18,11 +18,13 @@ export class MongoAdapter {
 
         const db = mongojsDb.db(this.dbName)
         this.db = db
-
+        console.log("=> Connected to Y-MongoDB")
       }finally{
         await mongojsDb.close()
       }
     }
+
+    connect()
   }
 
   async get (query) {

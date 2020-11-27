@@ -67,7 +67,7 @@ export const createDocumentStateVectorKey = docName => {
  * @param {any} db
  * @param {Object} values
  */
-export const mongoPut = async (db, values) => db.put(values)
+export const mongoPut = async (db, values) => await db.put(values)
 
 /**
  * @param {any} db
@@ -75,7 +75,7 @@ export const mongoPut = async (db, values) => db.put(values)
  * @param {object} opts
  * @return {Promise<Array<any>>}
  */
-export const getMongoBulkData = (db, query, opts) => db.readAsCursor(query, opts)
+export const getMongoBulkData = async (db, query, opts) => await db.readAsCursor(query, opts)
 
 /**
  * @param {any} db
@@ -91,7 +91,7 @@ export const flushDB = db => db.flush()
  * @param {any} [opts]
  * @return {Promise<Array<Object>>}
  */
-export const getMongoUpdates = async (db, docName, opts = {}) => getMongoBulkData(db, {
+export const getMongoUpdates = async (db, docName, opts = {}) => await getMongoBulkData(db, {
   ...createDocumentUpdateKey(docName, 0),
   clock: {
     $gte: 0,
@@ -106,7 +106,7 @@ opts
  * @param {string} docName
  * @return {Promise<number>} Returns -1 if this document doesn't exist yet
  */
-export const getCurrentUpdateClock = (db, docName) => getMongoUpdates(db, docName, {
+export const getCurrentUpdateClock = async (db, docName) => await getMongoUpdates(db, docName, {
   reverse: true,
   limit: 1
 }).then(updates => {
