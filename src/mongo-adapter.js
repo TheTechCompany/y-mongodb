@@ -44,7 +44,8 @@ export class MongoAdapter {
   }
 
   async readAsCursor (query, opts = {}) {
-    return await this.db.collection(this.collection).find(query).limit(opts.limit).sort({clock: -1}).toArray()
+    console.log("Read as cursor opts: ", opts)
+    return await this.db.collection(this.collection).find(query).sort({clock: -1}).toArray()
   }
 
   async close () {
