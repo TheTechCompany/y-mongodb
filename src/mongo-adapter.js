@@ -1,44 +1,52 @@
-import mongojs from 'mongojs'
-import mongoist from 'mongoist'
+const { MongoClient } = require('mongodb')
 
 export class MongoAdapter {
-  constructor (location, collection) {
+  constructor (location, dbName, collection) {
     this.location = location
+    this.dbName = dbName
     this.collection = collection || 'yjs-writings'
     this.db = null
     this.open()
   }
 
   open () {
-    const mongojsDb = mongojs(this.location, [this.collection])
-    this.db = mongoist(mongojsDb)
+    const mongojsDb = new MongoClient(this.location)
+
+    async function connect(){
+      try{
+        await mongojsDb.connect()
+
+        const db = mongojsDb.db(this.dbName)
+        this.db = db
+
+      }finally{
+        await mongojsDb.close()
+      }
+    }
   }
 
-  get (query) {
-    return this.db[this.collection].findOne(query)
+  async get (query) {
+    return await this.db.collection(this.collection).findOne(query)
   }
 
-  put (values) {
+  async put (values) {
     if (!values.docName && !values.version && !values.value) { throw new Error('Document and version must be provided') }
 
-    return this.db[this.collection].save(values)
+    return await this.db.collection(this.collection).save(values)
   }
 
-  del (query) {
-    const bulk = this.db[this.collection].initializeOrderedBulkOp()
-    bulk.find(query).remove()
-    return bulk.execute()
+  async del (query) {
+    const bulk = await this.db.collection(this.collection).initializeOrderedBulkOp()
+    await bulk.find(query).remove()
+    return await bulk.execute()
   }
 
-  readAsCursor (query, opts = {}) {
-    let curs = this.db[this.collection].findAsCursor(query)
-    if (opts.reverse) curs = curs.sort({ clock: -1 })
-    if (opts.limit) curs = curs.limit(opts.limit)
-    return curs.toArray()
+  async readAsCursor (query, opts = {}) {
+    return await this.db.collection(this.collection).find(query).limit(opts.limit).sort({clock: -1}).toArray()
   }
 
-  close () {
-    this.db.close()
+  async close () {
+    return await this.db.close()
   }
 
   async flush () {
