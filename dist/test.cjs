@@ -210,7 +210,7 @@ class MongoAdapter {
 
   async put (values) {
     if (!values.docName && !values.version && !values.value) { throw new Error('Document and version must be provided') }
-    console.log(values);
+    console.log(values.value.toString());
     return await this.db.collection(this.collection).save(values)
   }
 
