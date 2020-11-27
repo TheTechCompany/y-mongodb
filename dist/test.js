@@ -11353,7 +11353,7 @@
    */
   const isPromise = p => p instanceof Promise || (p && p.then && p.catch && p.finally);
 
-  const { MongoClient } = require('mongodb');
+  const { ObjectId, MongoClient } = require('mongodb');
 
   class MongoAdapter {
     constructor (location, dbName, collection) {
@@ -11390,7 +11390,7 @@
       let setter = {};
       setter[key] = value;
       return await this.db.collection(collection).updateOne({
-        _id: id
+        _id: ObjectId(id)
       }, {
         $set: setter
       })

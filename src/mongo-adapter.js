@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { ObjectId, MongoClient } = require('mongodb')
 
 export class MongoAdapter {
   constructor (location, dbName, collection) {
@@ -35,7 +35,7 @@ export class MongoAdapter {
     let setter = {}
     setter[key] = value
     return await this.db.collection(collection).updateOne({
-      _id: id
+      _id: ObjectId(id)
     }, {
       $set: setter
     })

@@ -8,7 +8,7 @@ var promise = require('lib0/dist/promise.cjs');
 var encoding = require('lib0/dist/encoding.cjs');
 var buffer = require('buffer');
 
-const { MongoClient } = require('mongodb');
+const { ObjectId, MongoClient } = require('mongodb');
 
 class MongoAdapter {
   constructor (location, dbName, collection) {
@@ -45,7 +45,7 @@ class MongoAdapter {
     let setter = {};
     setter[key] = value;
     return await this.db.collection(collection).updateOne({
-      _id: id
+      _id: ObjectId(id)
     }, {
       $set: setter
     })
