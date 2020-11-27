@@ -11302,7 +11302,7 @@
     if (clock === -1) {
       const ydoc = new Doc();
       applyUpdate(ydoc, update);
-      console.log(ydoc.toJSON());
+      console.log("STORE UPDATE", ydoc.toJSON());
       const sv = encodeStateVector(ydoc);
       await writeStateVector$1(db, docName, sv, 0);
     }
