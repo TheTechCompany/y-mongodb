@@ -189,11 +189,11 @@ class MongoAdapter {
   open () {
     const mongojsDb = new MongoClient(this.location, {useUnifiedTopology: true});
 
-    async function connect(){
+    async function connect(dbName){
       try{
         await mongojsDb.connect();
 
-        const db = mongojsDb.db(this.dbName);
+        const db = mongojsDb.db(dbName);
         this.db = db;
         console.log("=> Connected to Y-MongoDB");
       }finally{
@@ -201,7 +201,7 @@ class MongoAdapter {
       }
     }
 
-    connect();
+    connect(this.dbName);
   }
 
   async get (query) {
